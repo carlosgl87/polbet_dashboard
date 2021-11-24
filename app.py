@@ -62,7 +62,7 @@ for index, row in dfContests[dfContests['isContestOpenStatus']==True].iterrows()
 
 df_temp_1 = df_temp[df_temp['amount_bets']>0][['email','amount_bets','contests_bets']]
 df_temp_1.rename(columns={'email': 'Usuario', 'amount_bets': 'Monto Apostado','contests_bets':'Apuestas'}, inplace=True)
-df_temp_1 = df_temp_1.sort_values('Monto Apostado', ascending=False)
+df_temp_1 = df_temp_1.sort_values('Monto Apostado', ascending=False).reset_index(drop=True)
 
 
 ######################
@@ -97,6 +97,7 @@ col5.metric("Monto Apuestas Eventos Activos", int(amount_bets_events_active)
 ## Tabla Eventos Usuarios y Montos
 st.markdown("<hr/>",unsafe_allow_html=True)
 st.markdown("## Eventos Activos")
+df_events_active = df_events_active.sort_values('Monto Apuestas', ascending=False).reset_index(drop=True)
 st.dataframe(df_events_active)
 
 ## Tabla Usuarios Principales
