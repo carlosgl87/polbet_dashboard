@@ -7,3 +7,6 @@ Dashboard con los principales indicadores de la página de apuestas políticas P
 ```
 streamlit run app.py
 ```
+
+### Link del dashboard
+[text](https://share.streamlit.io/carlosgl87/polbet_dashboard/app.py)
