@@ -129,9 +129,9 @@ st.line_chart(df_days_contests)
 st.markdown("<hr/>",unsafe_allow_html=True)
 st.markdown("## Evolucion apuestas usuarios ultimos 10 dias")
 option_event_user = st.selectbox(
-    'Evento Activo',
+    'Usuario Activo',
     list(dfUsers[dfUsers['role']!='admin']['email']))
-st.write('Evolucion montos apuestas: ', option_event)
+st.write('Evolucion montos apuestas: ', option_event_user)
 
 id_user = dfUsers[dfUsers['email']==option_event_user]['_id'].reset_index(drop=True)[0]
 df_days_users = pd.DataFrame(Dateslist,columns=['day'])
