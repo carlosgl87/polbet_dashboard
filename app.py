@@ -128,7 +128,7 @@ st.line_chart(df_days_contests)
 ## Tabla probabilidades del evento
 st.markdown("<hr/>",unsafe_allow_html=True)
 st.markdown("## Probabilidades del evento")
-df_odds = pd.DataFrame(columns=['option','probability_page','numbet_bets','bets_amount','probability_users'])
+df_odds = pd.DataFrame(columns=['Opcion','Probabilidad Pagina','Numero Apuestas','Monto Apuestas','Probabilidad Usuarios'])
 options_dict = dfContests[dfContests['_id']==id_event]['options'].reset_index(drop=True).loc[0]
 total_amount = float(dfBets[dfBets['contestId']==id_event]['amount'].sum())
 for i in list(range(len(options_dict))):
@@ -138,7 +138,8 @@ for i in list(range(len(options_dict))):
     option_num_bets = len(dfBets[(dfBets['contestId']==id_event)&(dfBets['option']==opti)])
     df_odds.loc[i] = [opti,prob,option_num_bets,option_amount,option_amount/total_amount]
 
-st.dataframe(df_odds)
+st.dataframe(df_odds.style.format({"Probabilidad Pagina": "{:.2f}", "Numero Apuestas": "{:.0f}",
+                                   "Monto Apuestas": "{:.1f}", "Probabilidad Usuarios": "{:.2f}"}))
 
 
 ## Grafico evolucion montos apostados usuarios
