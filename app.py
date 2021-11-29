@@ -158,3 +158,13 @@ df_days_users['amount'] = df_days_users['amount'].fillna(0)
 df_days_users = df_days_users.set_index('day')
 
 st.line_chart(df_days_users)
+
+
+df_temp_2 = df_temp[df_temp['role']!='admin'][['email','amount_bets','contests_bets']]
+df_temp_2.rename(columns={'email': 'Usuario', 'amount_bets': 'Monto Apostado','contests_bets':'Apuestas'}, inplace=True)
+df_temp_2 = df_temp_2.sort_values('Monto Apostado', ascending=False).reset_index(drop=True)
+
+## Tabla todos los usuarios
+st.markdown("<hr/>",unsafe_allow_html=True)
+st.markdown("## Usuarios Registrados")
+st.dataframe(df_temp_2.style.format({"Monto Apostado": "{:.1f}", "Apuestas": "{:.0f}"}))
