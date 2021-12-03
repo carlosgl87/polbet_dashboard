@@ -171,14 +171,14 @@ st.dataframe(df_temp_2.style.format({"Monto Apostado": "{:.1f}", "Apuestas": "{:
 
 ## Simulacion Ganancia Cierre Apuesta
 st.markdown("<hr/>",unsafe_allow_html=True)
-st.markdown("## Evolucion apuestas usuarios ultimos 10 dias")
+st.markdown("## Simulador cierre evento")
 
 dfBets['amount'] = pd.to_numeric(dfBets['amount'])
 dfBets['potentialGain'] = pd.to_numeric(dfBets['potentialGain'])
 
 simulator_option_event = st.selectbox(
     'Evento Activo',
-    list(df_events_active['Evento']))
+    list(dfContests[dfContests['isContestOpenStatus']==True]['name']))
 
 
 simulator_id_event = dfContests[dfContests['name']==simulator_option_event]['_id'].reset_index(drop=True)[0]
@@ -194,14 +194,4 @@ option_winner = st.selectbox(
 st.write('Evolucion montos apuestas: ', simulator_option_event)
 st.write('Opcion Ganadora: ', option_winner)
 
-amount_total = dfBets[dfBets['contestId']==simulator_id_event]['amount'].sum()
-amount_winnet_total = dfBets[(dfBets['contestId']==simulator_id_event)&(dfBets['option']==option_winner)]['amount'].sum()
-amount_winner_gain = dfBets[(dfBets['contestId']==simulator_id_event)&(dfBets['option']==option_winner)]['potentialGain'].sum() - amount_winnet_total
-amount_loser = dfBets[(dfBets['contestId']==simulator_id_event)&(dfBets['option']!=option_winner)]['amount'].sum()
 
-df_resultado_evento = pd.DataFrame(columns=['Concepto','Monto'])
-df_resultado_evento.loc[0] = ['Monto Apostado',amount_total]
-df_resultado_evento.loc[1] = ['Ganancia',amount_loser-amount_winner_gain]
-df_resultado_evento.loc[2] = ['% Ganancia',(amount_loser-amount_winner_gain)/amount_total]
-
-st.dataframe(df_resultado_evento.style.format({"Monto": "{:.2f}"}))
