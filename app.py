@@ -176,7 +176,7 @@ st.markdown("## Evolucion apuestas usuarios ultimos 10 dias")
 dfBets['amount'] = pd.to_numeric(dfBets['amount'])
 dfBets['potentialGain'] = pd.to_numeric(dfBets['potentialGain'])
 
-option_event = st.selectbox(
+simulator_option_event = st.selectbox(
     'Evento Activo',
     list(df_events_active['Evento']))
 
@@ -189,7 +189,7 @@ option_winner = st.selectbox(
     'Opcion Ganadora',
     options_list)
 
-st.write('Evolucion montos apuestas: ', option_event)
+st.write('Evolucion montos apuestas: ', simulator_option_event)
 st.write('Opcion Ganadora: ', option_winner)
 
 amount_total = dfBets[dfBets['contestId']==id_event]['amount'].sum()
