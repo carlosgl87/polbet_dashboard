@@ -177,7 +177,7 @@ dfBets['amount'] = pd.to_numeric(dfBets['amount'])
 dfBets['potentialGain'] = pd.to_numeric(dfBets['potentialGain'])
 
 simulator_option_event = st.selectbox(
-    'Evento Activo',
+    'Evento',
     list(dfContests[dfContests['isContestOpenStatus']==True]['name']))
 
 
