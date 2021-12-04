@@ -79,10 +79,9 @@ st.set_page_config(
 ## First Rows KPIs
 st.markdown("## Principales KPIs")
 col1, col2, col3 = st.columns(3)
-#col1.metric("Numero Usuarios", num_users, "+1%")
 col1.metric("Numero Usuarios", num_users)
 col2.metric("Numero Usuarios Activos", num_users_active)
-col3.metric("Total Monto Apostado", total_amount_bets)
+col3.metric("Total Monto Apostado", 12)
 
 ## Second Rows KPIs
 
