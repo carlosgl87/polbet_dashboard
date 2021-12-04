@@ -91,8 +91,7 @@ col1.metric("Eventos Totales", total_events)
 col2.metric("Eventos Activos", total_events_active)
 col3.metric("Usuarios Eventos Activos", users_events_active)
 col4.metric("Numero Apuestas Eventos Activos", number_bets_events_active)
-col5.metric("Monto Apuestas Eventos Activos", int(amount_bets_events_active)
-)
+col5.metric("Monto Apuestas Eventos Activos", int(amount_bets_events_active))
 
 ## Tabla Eventos Usuarios y Montos
 st.markdown("<hr/>",unsafe_allow_html=True)
