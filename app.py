@@ -118,7 +118,7 @@ st.dataframe(df_events_active)
 ## Evolucion montos de apuestas ultimos 20 dias
 st.markdown("<hr/>",unsafe_allow_html=True)
 st.markdown("## Evolucion montos de apuestas ultimos 20 dias")
-dfBets['day'] = dfBets['createdAt'].dt.round("D")
+dfBets['day'] = dfBets['createdAt'].dt.floor("D")
 today = date.today()
 Dateslist = [today - timedelta(days = day) for day in range(20)]
 df_days_bets = pd.DataFrame(Dateslist,columns=['day'])
@@ -146,7 +146,7 @@ option_event = st.selectbox(
 st.write('Evolucion montos apuestas: ', option_event)
 
 id_event = dfContests[dfContests['name']==option_event]['_id'].reset_index(drop=True)[0]
-dfBets['day'] = dfBets['createdAt'].dt.round("D")
+dfBets['day'] = dfBets['createdAt'].dt.floor("D")
 today = date.today()
 Dateslist = [today - timedelta(days = day) for day in range(10)]
 df_days_contests = pd.DataFrame(Dateslist,columns=['day'])
