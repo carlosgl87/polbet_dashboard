@@ -119,6 +119,7 @@ df_days_contests = pd.DataFrame(Dateslist,columns=['day'])
 df_days_contests['day'] = pd.to_datetime(df_days_contests['day'])
 df_days_contests = pd.merge(df_days_contests,dfBets[dfBets['contestId']==id_event].groupby('day').agg({'amount':'sum'}).reset_index(),how='left',on='day')
 df_days_contests['amount'] = df_days_contests['amount'].fillna(0)
+df_days_contests['day'] = df_days_contests['day'].dt.strftime('%y-%m-%d')
 df_days_contests = df_days_contests.set_index('day')
 
 st.line_chart(df_days_contests)
