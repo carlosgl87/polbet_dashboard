@@ -34,6 +34,8 @@ cursorUsers = collectionUsers.find({})
 resultUsers = list(cursorUsers)
 dfUsers = pd.DataFrame(resultUsers)
 
+dfBets['createdAt'] = dfBets['createdAt'] - pd.Timedelta(hours=5)
+
 dfBets['contests'] = 1
 dfBets['amount'] = pd.to_numeric(dfBets['amount'])
 dfBets['potentialGain'] = pd.to_numeric(dfBets['potentialGain'])
