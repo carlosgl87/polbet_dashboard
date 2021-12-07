@@ -6,6 +6,8 @@ import ssl
 from bson.objectid import ObjectId
 from datetime import date, timedelta
 
+pd.set_option('display.float_format', lambda x: '%.2f' % x)
+
 ######################
 ######## Data ########
 ######################
@@ -60,9 +62,9 @@ for index, row in dfContests[dfContests['isContestOpenStatus']==True].iterrows()
     cont = cont + 1
 
 
-df_temp_1 = df_temp[df_temp['amount_bets']>0][['email','amount_bets','contests_bets','createdAt_last_bet']]
+df_temp_1 = df_temp[df_temp['amount_bets']>0][['email','amount','amount_bets','contests_bets','createdAt_last_bet']]
 df_temp_1['createdAt_last_bet'] = df_temp_1['createdAt_last_bet'].dt.strftime('%y-%m-%d')
-df_temp_1.rename(columns={'email': 'Usuario', 'amount_bets': 'Monto Apostado','contests_bets':'Apuestas','createdAt_last_bet':'Fecha Ultima Apuesta'}, inplace=True)
+df_temp_1.rename(columns={'email': 'Usuario', 'amount':'Saldo','amount_bets': 'Monto Apostado','contests_bets':'Apuestas','createdAt_last_bet':'Fecha Ultima Apuesta'}, inplace=True)
 df_temp_1 = df_temp_1.sort_values('Monto Apostado', ascending=False).reset_index(drop=True)
 
 
