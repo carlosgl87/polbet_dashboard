@@ -122,6 +122,7 @@ df_days_contests['amount'] = df_days_contests['amount'].fillna(0)
 df_days_contests['day'] = df_days_contests['day'].dt.strftime('%y-%m-%d')
 df_days_contests = df_days_contests.set_index('day')
 
+st.bar_chart(df_days_contests)
 st.line_chart(df_days_contests)
 
 ## Tabla probabilidades del evento
@@ -154,6 +155,7 @@ df_days_users = pd.DataFrame(Dateslist,columns=['day'])
 df_days_users['day'] = pd.to_datetime(df_days_users['day'])
 df_days_users = pd.merge(df_days_users,dfBets[dfBets['userId']==id_user].groupby('day').agg({'amount':'sum'}).reset_index(),how='left',on='day')
 df_days_users['amount'] = df_days_users['amount'].fillna(0)
+df_days_users['day'] = df_days_users['day'].dt.strftime('%y-%m-%d')
 df_days_users = df_days_users.set_index('day')
 
 st.bar_chart(df_days_users)
