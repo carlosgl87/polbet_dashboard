@@ -36,14 +36,16 @@ dfUsers = pd.DataFrame(resultUsers)
 
 dfBets['contests'] = 1
 dfBets['amount'] = pd.to_numeric(dfBets['amount'])
+dfBets['potentialGain'] = pd.to_numeric(dfBets['potentialGain'])
 dfBets = pd.merge(dfBets,dfContests[['_id','isContestOpenStatus']],how='left',left_on='contestId',right_on='_id')
 dfBets['contest_open'] = dfBets['isContestOpenStatus'].map({True: 1, False: 0})
 dfBets['contest_close'] = dfBets['isContestOpenStatus'].map({True: 0, False: 1})
 dfBets['contest_winner'] = dfBets['winner'].map({True: 1, False: 0})
 dfBets['contest_loser'] = dfBets['winner'].map({True: 0, False: 1})
+dfBets['marginal_gain'] = dfBets['potentialGain'] - dfBets['amount']
 dfBets['monto_curso'] = dfBets['contest_open'] * dfBets['amount']
 dfBets['monto_perdido'] = dfBets['contest_close'] * dfBets['contest_loser'] * dfBets['amount']
-dfBets['monto_ganado'] = dfBets['contest_close'] * dfBets['contest_winner'] * dfBets['potentialGain']
+dfBets['monto_ganado'] = dfBets['contest_close'] * dfBets['contest_winner'] * dfBets['marginal_gain']
 
 dfBets_users = dfBets.groupby('userId').agg({'createdAt':'last','amount':'sum','monto_curso':'sum','monto_perdido':'sum','monto_ganado':'sum','contests':'sum'}).reset_index()
 dfBets_users.rename(columns={'amount':'amount_bets','contests': 'contests_bets','createdAt':'createdAt_last_bet'}, inplace=True)
@@ -130,7 +132,7 @@ st.bar_chart(df_days_bets)
 st.markdown("<hr/>",unsafe_allow_html=True)
 st.markdown("## Usuarios Principales")
 #st.dataframe(df_temp_1)
-st.dataframe(df_temp_1.style.format({"Saldo": "{:.1f}","Apuestas en Curso": "{:.1f}","Monto Perdido":"{:.1f}","Apuestas": "{:.0f}"}))
+st.dataframe(df_temp_1.style.format({"Saldo": "{:.1f}","Apuestas en Curso": "{:.1f}","Monto Perdido":"{:.1f}","Monto Ganado":"{:.1f}","Apuestas": "{:.0f}"}))
 #st.dataframe(df_temp_1.style.format({"Saldo": "{:.1f}", "Apuestas en Curso": "{:.1f}", "Monto Perdido":"{:.1f}","Monto Ganado":"{:.1f}","Apuestas": "{:.0f}"}))
 
 ## Grafico evolucion apuestas por evento activo
