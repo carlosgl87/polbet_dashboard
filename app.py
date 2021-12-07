@@ -98,6 +98,21 @@ st.markdown("## Eventos Activos")
 df_events_active = df_events_active.sort_values('Monto Apuestas', ascending=False).reset_index(drop=True)
 st.dataframe(df_events_active)
 
+## Evolucion montos de apuestas ultimos 20 dias
+st.markdown("<hr/>",unsafe_allow_html=True)
+st.markdown("## Evolucion montos de apuestas ultimos 20 dias")
+dfBets['day'] = dfBets['createdAt'].dt.round("D")
+today = date.today()
+Dateslist = [today - timedelta(days = day) for day in range(20)]
+df_days_bets = pd.DataFrame(Dateslist,columns=['day'])
+df_days_bets['day'] = pd.to_datetime(df_days_bets['day'])
+df_days_bets = pd.merge(df_days_bets,dfBets.groupby('day').agg({'amount':'sum'}).reset_index(),how='left',on='day')
+df_days_bets['amount'] = df_days_bets['amount'].fillna(0)
+df_days_bets['day'] = df_days_bets['day'].dt.strftime('%y-%m-%d')
+df_days_bets = df_days_bets.set_index('day')
+
+st.bar_chart(df_days_bets)
+
 ## Tabla Usuarios Principales
 st.markdown("<hr/>",unsafe_allow_html=True)
 st.markdown("## Usuarios Principales")
@@ -123,7 +138,7 @@ df_days_contests['day'] = df_days_contests['day'].dt.strftime('%y-%m-%d')
 df_days_contests = df_days_contests.set_index('day')
 
 st.bar_chart(df_days_contests)
-st.line_chart(df_days_contests)
+#st.line_chart(df_days_contests)
 
 ## Tabla probabilidades del evento
 st.markdown("<hr/>",unsafe_allow_html=True)
@@ -159,7 +174,7 @@ df_days_users['day'] = df_days_users['day'].dt.strftime('%y-%m-%d')
 df_days_users = df_days_users.set_index('day')
 
 st.bar_chart(df_days_users)
-st.line_chart(df_days_users)
+#st.line_chart(df_days_users)
 
 
 df_temp_2 = df_temp[df_temp['role']!='admin'][['email','amount_bets','contests_bets']]
