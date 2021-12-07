@@ -45,8 +45,8 @@ dfBets['monto_curso'] = dfBets['contest_open'] * dfBets['amount']
 dfBets['monto_perdido'] = dfBets['contest_close'] * dfBets['contest_loser'] * dfBets['amount']
 dfBets['monto_ganado'] = dfBets['contest_close'] * dfBets['contest_winner'] * dfBets['potentialGain']
 
-dfBets_users = dfBets.groupby('userId').agg({'createdAt':'last','monto_curso':'sum','monto_perdido':'sum','monto_ganado':'sum','contests':'sum'}).reset_index()
-dfBets_users.rename(columns={'contests': 'contests_bets','createdAt':'createdAt_last_bet'}, inplace=True)
+dfBets_users = dfBets.groupby('userId').agg({'createdAt':'last','amount':'sum','monto_curso':'sum','monto_perdido':'sum','monto_ganado':'sum','contests':'sum'}).reset_index()
+dfBets_users.rename(columns={'amount':'amount_bets','contests': 'contests_bets','createdAt':'createdAt_last_bet'}, inplace=True)
 df_temp = pd.merge(dfUsers,dfBets_users,how='left',left_on='_id',right_on='userId')
 
 ## Main KPIS
