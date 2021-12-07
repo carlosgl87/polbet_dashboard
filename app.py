@@ -130,7 +130,7 @@ st.bar_chart(df_days_bets)
 st.markdown("<hr/>",unsafe_allow_html=True)
 st.markdown("## Usuarios Principales")
 st.dataframe(df_temp_1)
-st.dataframe(df_temp_1.style.format({"Saldo": "{:.1f}", "Apuestas en Curso": "{:.1f}", "Monto Perdido":"{:.1f}"}))
+st.dataframe(df_temp_1.style.format({"Saldo": "{:.1f}", "Apuestas en Curso": "{:.1f}", "Monto Perdido":"{:.1f}",  "Monto Ganado":"{:.1f}"}))
 #st.dataframe(df_temp_1.style.format({"Saldo": "{:.1f}", "Apuestas en Curso": "{:.1f}", "Monto Perdido":"{:.1f}","Monto Ganado":"{:.1f}","Apuestas": "{:.0f}"}))
 
 ## Grafico evolucion apuestas por evento activo
