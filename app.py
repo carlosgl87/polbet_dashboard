@@ -260,7 +260,7 @@ col1.metric("Numero Eventos Cerrados", int(num_eventos_cerrados))
 col2.metric("Numero Apuestas", int(num_apuestas_cerradas))
 col3.metric("Monto Apuestas", int(monto_apuestas_cerradas))
 
-col1, col2, col3 = st.columns(3)
+col1, col2, col3 = st.columns(4)
 col1.metric("Monto Ganado", int(monto_apuestas_cerradas_winner))
 col2.metric("Monto Perdido", int(monto_apuestas_cerradas_losser))
 col3.metric("Apuestas Ganadas", int(num_apuestas_cerradas_winner))
