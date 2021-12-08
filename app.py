@@ -240,3 +240,28 @@ df_resultado_evento.loc[1] = ['Ganancia',amount_loser-amount_winner_gain]
 df_resultado_evento.loc[2] = ['% Ganancia',(amount_loser-amount_winner_gain)/amount_total]
 
 st.dataframe(df_resultado_evento.style.format({"Monto": "{:.2f}"}))
+
+## Analisis Apuestas Cerradas
+st.markdown("<hr/>",unsafe_allow_html=True)
+st.markdown("## Analisis Apuestas Cerradas")
+
+# KPIS Eventos Cerrados
+num_eventos_cerrados = len(dfContests[dfContests['isContestOpenStatus']==False])
+num_apuestas_cerradas = len(dfBets[dfBets['isContestOpenStatus']==False])
+monto_apuestas_cerradas = dfBets[(dfBets['isContestOpenStatus']==False)]['amount'].sum()
+
+num_apuestas_cerradas_winner = len(dfBets[(dfBets['isContestOpenStatus']==False)&(dfBets['winner']==True)])
+num_apuestas_cerradas_losser = len(dfBets[(dfBets['isContestOpenStatus']==False)&(dfBets['winner']==False)])
+monto_apuestas_cerradas_losser = dfBets[(dfBets['isContestOpenStatus']==False)&(dfBets['winner']==False)]['amount'].sum()
+monto_apuestas_cerradas_winner = dfBets[(dfBets['isContestOpenStatus']==False)&(dfBets['winner']==True)]['marginal_gain'].sum()
+
+col1, col2, col3 = st.columns(3)
+col1.metric("Numero Eventos Cerrados", num_eventos_cerrados)
+col2.metric("Numero Apuestas", num_apuestas_cerradas)
+col3.metric("Monto Apuestas", monto_apuestas_cerradas)
+
+col1, col2, col3 = st.columns(3)
+col1.metric("Monto Ganado", monto_apuestas_cerradas_winner)
+col2.metric("Monto Perdido", monto_apuestas_cerradas_losser)
+col3.metric("Apuestas Ganadas", num_apuestas_cerradas_winner)
+col4.metric("Apuestas Perdidas", num_apuestas_cerradas_losser)
