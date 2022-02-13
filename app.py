@@ -91,13 +91,31 @@ users_events_active = len(dfBets[dfBets['contestId'].isin(list(dfContests[dfCont
 number_bets_events_active = len(dfBets[dfBets['contestId'].isin(list(dfContests[dfContests['isContestOpenStatus']==True]['_id']))])
 amount_bets_events_active = dfBets[dfBets['contestId'].isin(list(dfContests[dfContests['isContestOpenStatus']==True]['_id']))]['amount'].sum()
 
-df_events_active = pd.DataFrame(columns=['Evento','Numero Apuestas','Monto Apuestas'])
+def dif_prob(id_event):
+    df_odds = pd.DataFrame(columns=['Opcion','Probabilidad Pagina','Numero Apuestas','Monto Apuestas','Probabilidad Usuarios'])
+    options_dict = dfContests[dfContests['_id']==id_event]['options'].reset_index(drop=True).loc[0]
+    total_amount = float(dfBets[dfBets['contestId']==id_event]['amount'].sum())
+    for i in list(range(len(options_dict))):
+        opti = options_dict[i]['option_explanation']
+        prob = options_dict[i]['probability']
+        option_amount = float(dfBets[(dfBets['contestId']==id_event)&(dfBets['option']==opti)]['amount'].sum())
+        option_num_bets = len(dfBets[(dfBets['contestId']==id_event)&(dfBets['option']==opti)])
+        df_odds.loc[i] = [opti,prob,option_num_bets,option_amount,option_amount/total_amount]
+    df_odds['error'] = df_odds['Probabilidad Pagina'] - df_odds['Probabilidad Usuarios']
+    df_odds['error'] = df_odds['error'].abs()
+    return df_odds['error'].sum()
+
+df_events_active = pd.DataFrame(columns=['Evento','Numero Apuestas','Monto Apuestas','Diferencia Prob'])
 cont = 0
 for index, row in dfContests[dfContests['isContestOpenStatus']==True].iterrows():
     name_event = row['name']
     number_bets = len(dfBets[dfBets['contestId']==ObjectId(row['_id'])])
     amount_bets = dfBets[dfBets['contestId']==ObjectId(row['_id'])]['amount'].sum()
-    df_events_active.loc[cont] = [name_event,number_bets,amount_bets]
+    if amount_bets > 0:
+        diferencia_probabilidades = dif_prob(row['_id'])
+    else:
+        diferencia_probabilidades = np.nan
+    df_events_active.loc[cont] = [name_event,number_bets,amount_bets,diferencia_probabilidades]
     cont = cont + 1
 
 
