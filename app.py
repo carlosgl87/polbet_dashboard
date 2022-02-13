@@ -258,6 +258,16 @@ st.markdown("<hr/>",unsafe_allow_html=True)
 st.markdown("## Usuarios Registrados")
 st.dataframe(df_temp_2.style.format({"Monto Apostado": "{:.1f}", "Apuestas": "{:.0f}"}))
 
+## Tabla Depositos
+st.markdown("<hr/>",unsafe_allow_html=True)
+st.markdown("## Depositos")
+st.dataframe(df_depositos.style.format({"Monto": "{:.1f}"}))
+
+## Tabla Retiro
+st.markdown("<hr/>",unsafe_allow_html=True)
+st.markdown("## Retiros")
+st.dataframe(df_retiros.style.format({"Monto": "{:.1f}"}))
+
 ## Simulacion Ganancia Cierre Apuesta
 st.markdown("<hr/>",unsafe_allow_html=True)
 st.markdown("## Simulador cierre evento")
