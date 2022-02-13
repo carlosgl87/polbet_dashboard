@@ -119,9 +119,10 @@ for index, row in dfContests[dfContests['isContestOpenStatus']==True].iterrows()
     cont = cont + 1
 
 
-df_temp_1 = df_temp[['email','amount','monto_curso','monto_perdido','monto_ganado','contests_bets','createdAt_last_bet']]
+df_temp_1 = df_temp[['email','amount','monto_curso','monto_perdido','monto_ganado','contests_bets','createdAt_last_bet','createdAt']]
 df_temp_1['createdAt_last_bet'] = df_temp_1['createdAt_last_bet'].dt.strftime('%y-%m-%d')
-df_temp_1.rename(columns={'email': 'Usuario', 'amount':'Saldo','monto_curso': 'Apuestas en Curso','monto_perdido':'Monto Perdido','monto_ganado':'Monto Ganado','contests_bets':'Apuestas','createdAt_last_bet':'Fecha Ultima Apuesta'}, inplace=True)
+df_temp_1['createdAt'] = df_temp_1['createdAt'].dt.strftime('%y-%m-%d')
+df_temp_1.rename(columns={'email': 'Usuario', 'amount':'Saldo','monto_curso': 'Apuestas en Curso','monto_perdido':'Monto Perdido','monto_ganado':'Monto Ganado','contests_bets':'Apuestas','createdAt_last_bet':'Fecha Ultima Apuesta','createdAt':'Fecha Registro'}, inplace=True)
 df_temp_1 = df_temp_1.sort_values('Apuestas en Curso', ascending=False).reset_index(drop=True)
 
 
