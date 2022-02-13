@@ -34,6 +34,32 @@ cursorUsers = collectionUsers.find({})
 resultUsers = list(cursorUsers)
 dfUsers = pd.DataFrame(resultUsers)
 
+## depositos y retiros
+num_depositos = 0
+mon_depositos = 0
+num_retiros = 0
+mon_retiros = 0
+df_retiros = pd.DataFrame(columns=['Usuario','Monto','Fecha'])
+df_depositos = pd.DataFrame(columns=['Usuario','Monto','Fecha'])
+
+for index, row in dfUsers.iterrows():
+    name_user = row['email']
+    lista_cuenta = dfUsers[dfUsers['email']==name_user]['balance_history'].values[0]
+    if type(lista_cuenta) is list:
+        for i in range(len(lista_cuenta)):
+            if lista_cuenta[i]['state'] == 'approved':
+                if lista_cuenta[i]['balanceType'] == 'deposit':
+                    fecha = pd.to_datetime(lista_cuenta[i]['createdAt'])- pd.Timedelta(hours=5)
+                    df_depositos.loc[num_depositos] = [name_user,lista_cuenta[i]['amount'],fecha]
+                    num_depositos = num_depositos + 1
+                    mon_depositos = mon_depositos + lista_cuenta[i]['amount']
+                if lista_cuenta[i]['balanceType'] == 'withdrawal':
+                    fecha = pd.to_datetime(lista_cuenta[i]['createdAt'])- pd.Timedelta(hours=5)
+                    df_retiros.loc[num_retiros] = [name_user,lista_cuenta[i]['amount'],fecha]
+                    num_retiros = num_retiros + 1
+                    mon_retiros = mon_retiros + lista_cuenta[i]['amount']
+
+
 dfBets['createdAt'] = dfBets['createdAt'] - pd.Timedelta(hours=5)
 
 dfBets['contests'] = 1
@@ -108,6 +134,14 @@ col2.metric("Eventos Activos", total_events_active)
 col3.metric("Usuarios Eventos Activos", users_events_active)
 col4.metric("Numero Apuestas Eventos Activos", number_bets_events_active)
 col5.metric("Monto Apuestas Eventos Activos", int(amount_bets_events_active))
+
+## Third Rows KPIs
+
+col1, col2, col3, col4 = st.columns(4)
+col1.metric("Monto Depositos", mon_depositos)
+col2.metric("Numero Depositos", num_depositos)
+col3.metric("Monto Retiros", mon_retiros)
+col4.metric("Numero Retiros", num_retiros)
 
 ## Tabla Eventos Usuarios y Montos
 st.markdown("<hr/>",unsafe_allow_html=True)
