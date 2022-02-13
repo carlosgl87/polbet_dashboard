@@ -3,7 +3,7 @@
 # POLBET DASHBOARD
 Dashboard con los principales indicadores de la página de apuestas políticas POLBET
 
-### Para correr localmente el dashboard
+### Para correr localmente el dashboard Prueba GITPOD
 ```
 streamlit run app.py
 ```
