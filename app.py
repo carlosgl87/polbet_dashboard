@@ -213,6 +213,11 @@ st.dataframe(df_odds.style.format({"Probabilidad Pagina": "{:.2f}", "Numero Apue
 
 
 
+
+df_temp_2 = df_temp[df_temp['role']!='admin'][['email','amount_bets','contests_bets']]
+df_temp_2.rename(columns={'email': 'Usuario', 'amount_bets': 'Monto Apostado','contests_bets':'Apuestas'}, inplace=True)
+df_temp_2 = df_temp_2.sort_values('Monto Apostado', ascending=False).reset_index(drop=True)
+
 ## Tabla todos los usuarios
 st.markdown("<hr/>",unsafe_allow_html=True)
 st.markdown("## Usuarios Registrados")
