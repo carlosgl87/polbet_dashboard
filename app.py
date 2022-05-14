@@ -61,7 +61,6 @@ for index, row in dfUsers.iterrows():
 
 
 dfBets['createdAt'] = dfBets['createdAt'] - pd.Timedelta(hours=5)
-
 dfBets['contests'] = 1
 dfBets['amount'] = pd.to_numeric(dfBets['amount'])
 dfBets['potentialGain'] = pd.to_numeric(dfBets['potentialGain'])
@@ -105,6 +104,7 @@ def dif_prob(id_event):
     df_odds['error'] = df_odds['error'].abs()
     return df_odds['error'].sum()
 
+## tabla resumen 
 df_events_active = pd.DataFrame(columns=['EVENTO','OPEN','NUM_PERSONAS','NUM_APUESTA','MONTO_APUESTA','TICKET_PROMEDIO','DIF_PROB'])
 cont = 0
 for index, row in dfContests.iterrows():
@@ -121,28 +121,11 @@ for index, row in dfContests.iterrows():
     df_events_active.loc[cont] = [name_event, open_status, number_pers, number_bets,amount_bets,mean_amount,diferencia_probabilidades]
     cont = cont + 1
 
-## numero y monto de apuestas por evento (tanto cerrados como abiertos)
-df2 = pd.DataFrame(columns=['EVENTO','OPEN','TOTAL_MONTO','TOTAL_APUESTAS','TICKET_PROMEDIO','FECHA_ULTIMA'])
-cont = 0
-for index, row in dfContests.iterrows():
-    event_name = row['name']
-    open_status = row['isContestOpenStatus']
-    id_event = dfContests[dfContests['name']==event_name]['_id'].reset_index(drop=True)[0]
-    options_dict = dfContests[dfContests['_id']==id_event]['options'].reset_index(drop=True).loc[0]
-    total_amount = float(dfBets[dfBets['contestId']==id_event]['amount'].sum())
-    mean_amount = float(dfBets[dfBets['contestId']==id_event]['amount'].mean())
-    total_number = len(dfBets[dfBets['contestId']==id_event])
-    fecha_ultima = dfBets[dfBets['contestId']==id_event]['createdAt'].max()
-    df2.loc[cont] = [event_name,open_status,total_amount,total_number,mean_amount,fecha_ultima]
-    cont = cont + 1
-
 df_temp_1 = df_temp[['email','amount','monto_curso','monto_perdido','monto_ganado','contests_bets','createdAt_last_bet','createdAt']]
 df_temp_1['createdAt_last_bet'] = df_temp_1['createdAt_last_bet'].dt.strftime('%y-%m-%d')
 df_temp_1['createdAt'] = df_temp_1['createdAt'].dt.strftime('%y-%m-%d')
 df_temp_1.rename(columns={'email': 'Usuario', 'amount':'Saldo','monto_curso': 'Apuestas en Curso','monto_perdido':'Monto Perdido','monto_ganado':'Monto Ganado','contests_bets':'Apuestas','createdAt_last_bet':'Fecha Ultima Apuesta','createdAt':'Fecha Registro'}, inplace=True)
 df_temp_1 = df_temp_1.sort_values('Apuestas en Curso', ascending=False).reset_index(drop=True)
-
-
 
 
 ######################
@@ -198,7 +181,6 @@ df_days_bets = pd.merge(df_days_bets,dfBets.groupby('day').agg({'amount':'sum'})
 df_days_bets['amount'] = df_days_bets['amount'].fillna(0)
 df_days_bets['day'] = df_days_bets['day'].dt.strftime('%y-%m-%d')
 df_days_bets = df_days_bets.set_index('day')
-
 st.bar_chart(df_days_bets)
 
 ## Tabla Usuarios Principales
@@ -208,31 +190,13 @@ st.markdown("## Usuarios Principales")
 st.dataframe(df_temp_1.style.format({"Saldo": "{:.1f}","Apuestas en Curso": "{:.1f}","Monto Perdido":"{:.1f}","Monto Ganado":"{:.1f}","Apuestas": "{:.0f}"}))
 #st.dataframe(df_temp_1.style.format({"Saldo": "{:.1f}", "Apuestas en Curso": "{:.1f}", "Monto Perdido":"{:.1f}","Monto Ganado":"{:.1f}","Apuestas": "{:.0f}"}))
 
-## Grafico evolucion apuestas por evento activo
-st.markdown("<hr/>",unsafe_allow_html=True)
-st.markdown("## Evolucion apuestas eventos activos ultimos 10 dias")
-option_event = st.selectbox(
-    'Evento Activo',
-    list(df_events_active['EVENTO']))
-st.write('Evolucion montos apuestas: ', option_event)
-
-id_event = dfContests[dfContests['name']==option_event]['_id'].reset_index(drop=True)[0]
-dfBets['day'] = dfBets['createdAt'].dt.floor("D")
-today = date.today()
-Dateslist = [today - timedelta(days = day) for day in range(10)]
-df_days_contests = pd.DataFrame(Dateslist,columns=['day'])
-df_days_contests['day'] = pd.to_datetime(df_days_contests['day'])
-df_days_contests = pd.merge(df_days_contests,dfBets[dfBets['contestId']==id_event].groupby('day').agg({'amount':'sum'}).reset_index(),how='left',on='day')
-df_days_contests['amount'] = df_days_contests['amount'].fillna(0)
-df_days_contests['day'] = df_days_contests['day'].dt.strftime('%y-%m-%d')
-df_days_contests = df_days_contests.set_index('day')
-
-st.bar_chart(df_days_contests)
-#st.line_chart(df_days_contests)
-
 ## Tabla probabilidades del evento
 st.markdown("<hr/>",unsafe_allow_html=True)
 st.markdown("## Probabilidades del evento")
+option_event = st.selectbox(
+    'Evento Activo',
+    list(df_events_active['EVENTO']))
+id_event = dfContests[dfContests['name']==option_event]['_id'].reset_index(drop=True)[0]
 df_odds = pd.DataFrame(columns=['Opcion','Probabilidad Pagina','Numero Apuestas','Monto Apuestas','Probabilidad Usuarios'])
 options_dict = dfContests[dfContests['_id']==id_event]['options'].reset_index(drop=True).loc[0]
 total_amount = float(dfBets[dfBets['contestId']==id_event]['amount'].sum())
