@@ -105,26 +105,21 @@ def dif_prob(id_event):
     df_odds['error'] = df_odds['error'].abs()
     return df_odds['error'].sum()
 
-df_events_active = pd.DataFrame(columns=['Evento','Numero Apuestas','Monto Apuestas','Diferencia Prob'])
+df_events_active = pd.DataFrame(columns=['EVENTO','OPEN','NUM_PERSONAS','NUM_APUESTA','MONTO_APUESTA','TICKET_PROMEDIO','DIF_PROB'])
 cont = 0
-for index, row in dfContests[dfContests['isContestOpenStatus']==True].iterrows():
+for index, row in dfContests.iterrows():
     name_event = row['name']
+    open_status = row['isContestOpenStatus']
+    number_pers = len(dfBets[dfBets['contestId']==ObjectId(row['_id'])]['userId'].unique())
     number_bets = len(dfBets[dfBets['contestId']==ObjectId(row['_id'])])
     amount_bets = dfBets[dfBets['contestId']==ObjectId(row['_id'])]['amount'].sum()
+    mean_amount = amount_bets / number_bets
     if amount_bets > 0:
         diferencia_probabilidades = dif_prob(row['_id'])
     else:
         diferencia_probabilidades = np.nan
-    df_events_active.loc[cont] = [name_event,number_bets,amount_bets,diferencia_probabilidades]
+    df_events_active.loc[cont] = [name_event, open_status, number_pers, number_bets,amount_bets,mean_amount,diferencia_probabilidades]
     cont = cont + 1
-
-
-df_temp_1 = df_temp[['email','amount','monto_curso','monto_perdido','monto_ganado','contests_bets','createdAt_last_bet','createdAt']]
-df_temp_1['createdAt_last_bet'] = df_temp_1['createdAt_last_bet'].dt.strftime('%y-%m-%d')
-df_temp_1['createdAt'] = df_temp_1['createdAt'].dt.strftime('%y-%m-%d')
-df_temp_1.rename(columns={'email': 'Usuario', 'amount':'Saldo','monto_curso': 'Apuestas en Curso','monto_perdido':'Monto Perdido','monto_ganado':'Monto Ganado','contests_bets':'Apuestas','createdAt_last_bet':'Fecha Ultima Apuesta','createdAt':'Fecha Registro'}, inplace=True)
-df_temp_1 = df_temp_1.sort_values('Apuestas en Curso', ascending=False).reset_index(drop=True)
-
 
 ## numero y monto de apuestas por evento (tanto cerrados como abiertos)
 df2 = pd.DataFrame(columns=['EVENTO','OPEN','TOTAL_MONTO','TOTAL_APUESTAS','TICKET_PROMEDIO','FECHA_ULTIMA'])
@@ -140,6 +135,15 @@ for index, row in dfContests.iterrows():
     fecha_ultima = dfBets[dfBets['contestId']==id_event]['createdAt'].max()
     df2.loc[cont] = [event_name,open_status,total_amount,total_number,mean_amount,fecha_ultima]
     cont = cont + 1
+
+df_temp_1 = df_temp[['email','amount','monto_curso','monto_perdido','monto_ganado','contests_bets','createdAt_last_bet','createdAt']]
+df_temp_1['createdAt_last_bet'] = df_temp_1['createdAt_last_bet'].dt.strftime('%y-%m-%d')
+df_temp_1['createdAt'] = df_temp_1['createdAt'].dt.strftime('%y-%m-%d')
+df_temp_1.rename(columns={'email': 'Usuario', 'amount':'Saldo','monto_curso': 'Apuestas en Curso','monto_perdido':'Monto Perdido','monto_ganado':'Monto Ganado','contests_bets':'Apuestas','createdAt_last_bet':'Fecha Ultima Apuesta','createdAt':'Fecha Registro'}, inplace=True)
+df_temp_1 = df_temp_1.sort_values('Apuestas en Curso', ascending=False).reset_index(drop=True)
+
+
+
 
 ######################
 ######## Page ########
