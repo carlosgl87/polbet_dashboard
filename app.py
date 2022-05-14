@@ -213,7 +213,7 @@ st.markdown("<hr/>",unsafe_allow_html=True)
 st.markdown("## Evolucion apuestas eventos activos ultimos 10 dias")
 option_event = st.selectbox(
     'Evento Activo',
-    list(df_events_active['Evento']))
+    list(df_events_active['EVENTO']))
 st.write('Evolucion montos apuestas: ', option_event)
 
 id_event = dfContests[dfContests['name']==option_event]['_id'].reset_index(drop=True)[0]
