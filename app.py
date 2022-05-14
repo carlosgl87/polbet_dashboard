@@ -126,6 +126,20 @@ df_temp_1.rename(columns={'email': 'Usuario', 'amount':'Saldo','monto_curso': 'A
 df_temp_1 = df_temp_1.sort_values('Apuestas en Curso', ascending=False).reset_index(drop=True)
 
 
+## numero y monto de apuestas por evento (tanto cerrados como abiertos)
+df2 = pd.DataFrame(columns=['EVENTO','OPEN','TOTAL_MONTO','TOTAL_APUESTAS','TICKET_PROMEDIO','FECHA_ULTIMA'])
+cont = 0
+for index, row in dfContests.iterrows():
+    event_name = row['name']
+    open_status = row['isContestOpenStatus']
+    id_event = dfContests[dfContests['name']==event_name]['_id'].reset_index(drop=True)[0]
+    options_dict = dfContests[dfContests['_id']==id_event]['options'].reset_index(drop=True).loc[0]
+    total_amount = float(dfBets[dfBets['contestId']==id_event]['amount'].sum())
+    mean_amount = float(dfBets[dfBets['contestId']==id_event]['amount'].mean())
+    total_number = len(dfBets[dfBets['contestId']==id_event])
+    fecha_ultima = dfBets[dfBets['contestId']==id_event]['createdAt'].max()
+    df2.loc[cont] = [event_name,open_status,total_amount,total_number,mean_amount,fecha_ultima]
+    cont = cont + 1
 
 ######################
 ######## Page ########
