@@ -211,29 +211,7 @@ st.dataframe(df_odds.style.format({"Probabilidad Pagina": "{:.2f}", "Numero Apue
                                    "Monto Apuestas": "{:.1f}", "Probabilidad Usuarios": "{:.2f}"}))
 
 
-## Grafico evolucion montos apostados usuarios
-st.markdown("<hr/>",unsafe_allow_html=True)
-st.markdown("## Evolucion apuestas usuarios ultimos 10 dias")
-option_event_user = st.selectbox(
-    'Usuario Activo',
-    list(dfUsers[dfUsers['role']!='admin']['email']))
-st.write('Evolucion montos apuestas: ', option_event_user)
 
-id_user = dfUsers[dfUsers['email']==option_event_user]['_id'].reset_index(drop=True)[0]
-df_days_users = pd.DataFrame(Dateslist,columns=['day'])
-df_days_users['day'] = pd.to_datetime(df_days_users['day'])
-df_days_users = pd.merge(df_days_users,dfBets[dfBets['userId']==id_user].groupby('day').agg({'amount':'sum'}).reset_index(),how='left',on='day')
-df_days_users['amount'] = df_days_users['amount'].fillna(0)
-df_days_users['day'] = df_days_users['day'].dt.strftime('%y-%m-%d')
-df_days_users = df_days_users.set_index('day')
-
-st.bar_chart(df_days_users)
-#st.line_chart(df_days_users)
-
-
-df_temp_2 = df_temp[df_temp['role']!='admin'][['email','amount_bets','contests_bets']]
-df_temp_2.rename(columns={'email': 'Usuario', 'amount_bets': 'Monto Apostado','contests_bets':'Apuestas'}, inplace=True)
-df_temp_2 = df_temp_2.sort_values('Monto Apostado', ascending=False).reset_index(drop=True)
 
 ## Tabla todos los usuarios
 st.markdown("<hr/>",unsafe_allow_html=True)
