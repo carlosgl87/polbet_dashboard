@@ -183,7 +183,7 @@ col4.metric("Numero Retiros", num_retiros)
 ## Tabla Eventos Usuarios y Montos
 st.markdown("<hr/>",unsafe_allow_html=True)
 st.markdown("## Eventos Activos")
-df_events_active = df_events_active.sort_values('Monto Apuestas', ascending=False).reset_index(drop=True)
+df_events_active = df_events_active.sort_values('MONTO_APUESTA', ascending=False).reset_index(drop=True)
 st.dataframe(df_events_active)
 
 ## Evolucion montos de apuestas ultimos 20 dias
