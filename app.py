@@ -43,6 +43,38 @@ df_retiros = pd.DataFrame(columns=['Usuario','Monto','Fecha'])
 df_depositos = pd.DataFrame(columns=['Usuario','Monto','Fecha'])
 
 
+######################
+######## Page ########
+######################
+
+st.set_page_config(
+    page_title = 'PolBet Dashboard',
+    page_icon = 'polbet.png',
+    layout = 'wide'
+)
+
+filtro_usuarios = st.select_slider("Displayed values:", ["sinFiltro", "conFiltro"])
+st.write('El filtro: ', filtro_usuarios)
+
+lista_usuarios_excluidos = ['admin@gmail.com',
+'jcarloslara23@gmail.com',
+'byjgphotos@gmail.com',
+'felipevdq@gmail.com',
+'fk.salasf@gmail.com',
+'juleysigcc@gmail.com',
+'devtorres2@gmail.com',
+'cyjys87@gmail.com',
+'carlos.gamero@yanbal.com',
+'juleysigcc@hotmail.com',
+'luis@inka-labs.com',
+'devtorres@gmail.com']
+
+lista_usuarios_excluidos_ids = dfUsers[dfUsers['email'].isin(lista_usuarios_excluidos)]['_id'].to_list()
+
+if filtro_usuarios == 'conFiltro':
+    dfUsers = dfUsers[~dfUsers['email'].isin(lista_usuarios_excluidos)]
+    dfBets = dfBets[~dfBets['userId'].isin(lista_usuarios_excluidos_ids)]
+
 for index, row in dfUsers.iterrows():
     name_user = row['email']
     lista_cuenta = dfUsers[dfUsers['email']==name_user]['balance_history'].values[0]
@@ -129,17 +161,7 @@ df_temp_1.rename(columns={'email': 'Usuario', 'amount':'Saldo','monto_curso': 'A
 df_temp_1 = df_temp_1.sort_values('Apuestas en Curso', ascending=False).reset_index(drop=True)
 
 
-######################
-######## Page ########
-######################
 
-st.set_page_config(
-    page_title = 'PolBet Dashboard',
-    page_icon = 'polbet.png',
-    layout = 'wide'
-)
-
-st.select_slider("Displayed values:", ["Normalized", "Absolute"])
 
 ## First Rows KPIs
 st.markdown("## Principales KPIs")
