@@ -53,8 +53,8 @@ st.set_page_config(
     layout = 'wide'
 )
 
-filtro_usuarios = st.select_slider("Displayed values:", ["sinFiltro", "conFiltro"])
-st.write('El filtro: ', filtro_usuarios)
+filtro_usuarios = st.select_slider("Filtrar usuarios PolBet:", ["sinFiltro", "conFiltro"])
+
 
 lista_usuarios_excluidos = ['admin@gmail.com',
 'jcarloslara23@gmail.com',
@@ -72,8 +72,10 @@ lista_usuarios_excluidos = ['admin@gmail.com',
 lista_usuarios_excluidos_ids = dfUsers[dfUsers['email'].isin(lista_usuarios_excluidos)]['_id'].to_list()
 
 if filtro_usuarios == 'conFiltro':
+    st.write('Se esta filtrando a los usuarios relacionados a PolBet')
     dfUsers = dfUsers[~dfUsers['email'].isin(lista_usuarios_excluidos)]
     dfBets = dfBets[~dfBets['userId'].isin(lista_usuarios_excluidos_ids)]
+
 
 for index, row in dfUsers.iterrows():
     name_user = row['email']
