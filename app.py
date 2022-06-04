@@ -231,7 +231,7 @@ for index, row in dfBets[dfBets['userId']==id_user].iterrows():
     open_evento = dfContests[dfContests['_id']==row['contestId']]['isContestOpenStatus'].reset_index(drop=True).loc[0]
     df_actividad_usuario.loc[cont] = [nom_evento,open_evento,row['option'],row['amount'],row['createdAt']]
     cont =cont + 1
-df_actividad_Usuario['Fecha'] = df_actividad_Usuario['Fecha'].dt.date
+df_actividad_usuario['Fecha'] = df_actividad_usuario['Fecha'].dt.floor("D")
 st.dataframe(df_actividad_usuario.style.format({"Monto": "{:.2f}"}))
 
 today = date.today()
