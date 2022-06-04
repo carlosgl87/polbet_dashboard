@@ -232,7 +232,7 @@ for index, row in dfBets[dfBets['userId']==id_user].iterrows():
     df_actividad_usuario.loc[cont] = [nom_evento,open_evento,row['option'],row['amount'],row['createdAt']]
     cont =cont + 1
 df_actividad_usuario['Fecha'] = df_actividad_usuario['Fecha'].dt.floor("D")
-df_actividad_usuario['Fecha'] = df_actividad_usuario['Fecha'].dt.strftime('%y-%m-%d')
+#df_actividad_usuario['Fecha'] = df_actividad_usuario['Fecha'].dt.strftime('%y-%m-%d')
 st.dataframe(df_actividad_usuario.style.format({"Monto": "{:.2f}"}))
 
 today = date.today()
@@ -241,7 +241,7 @@ df_bets_user = pd.DataFrame(Dateslist,columns=['Fecha'])
 df_bets_user['Fecha'] = pd.to_datetime(df_bets_user['Fecha'])
 df_bets_user = pd.merge(df_bets_user,df_actividad_usuario.groupby('Fecha').agg({'Monto':'sum'}).reset_index(),how='left',on='Fecha')
 df_bets_user['Monto'] = df_bets_user['Monto'].fillna(0)
-df_bets_user['Fecha'] = df_bets_user['Fecha'].dt.strftime('%y-%m-%d')
+#df_bets_user['Fecha'] = df_bets_user['Fecha'].dt.strftime('%y-%m-%d')
 df_bets_user = df_bets_user.set_index('Fecha')
 st.bar_chart(df_bets_user)
 
@@ -262,7 +262,18 @@ for index, row in dfBets[dfBets['contestId']==id_event].iterrows():
     df_actividad_evento.loc[cont] = [nom_evento,open_evento,nom_usuario,row['option'],row['amount'],row['createdAt']]
     cont = cont + 1
 df_actividad_evento['Fecha'] = df_actividad_evento['Fecha'].dt.floor("D")
-df_actividad_evento['Fecha'] = df_actividad_evento['Fecha'].dt.strftime('%y-%m-%d')
+#df_actividad_evento['Fecha'] = df_actividad_evento['Fecha'].dt.strftime('%y-%m-%d')
+
+today = date.today()
+Dateslist = [today - timedelta(days = day) for day in range(20)]
+df_bets_contest = pd.DataFrame(Dateslist,columns=['Fecha'])
+df_bets_contest['Fecha'] = pd.to_datetime(df_bets_contest['Fecha'])
+df_bets_contest = pd.merge(df_bets_contest,df_actividad_evento.groupby('Fecha').agg({'Monto':'sum'}).reset_index(),how='left',on='Fecha')
+df_bets_contest['Monto'] = df_bets_contest['Monto'].fillna(0)
+#df_bets_user['Fecha'] = df_bets_user['Fecha'].dt.strftime('%y-%m-%d')
+df_bets_contest = df_bets_contest.set_index('Fecha')
+st.bar_chart(df_bets_contest)
+
 
 st.dataframe(df_actividad_evento.style.format({"Monto": "{:.2f}"}))
 
