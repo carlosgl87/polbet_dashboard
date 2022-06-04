@@ -216,12 +216,17 @@ st.markdown("## Usuarios Principales")
 st.dataframe(df_temp_1.style.format({"Saldo": "{:.1f}","Apuestas en Curso": "{:.1f}","Monto Perdido":"{:.1f}","Monto Ganado":"{:.1f}","Apuestas": "{:.0f}"}))
 #st.dataframe(df_temp_1.style.format({"Saldo": "{:.1f}", "Apuestas en Curso": "{:.1f}", "Monto Perdido":"{:.1f}","Monto Ganado":"{:.1f}","Apuestas": "{:.0f}"}))
 
-## Detalle por usuario
+######################
+## SECCION USUARIOS ##
+######################
+
 st.markdown("<hr/>",unsafe_allow_html=True)
 st.markdown("## Usuario")
+temp = pd.merge(dfUsers[['_id','email']],dfBets.groupby('userId').agg({'amount':'sum'}).reset_index(),how='left',left_on='_id',right_on='userId')
+
 option_user = st.selectbox(
     'Usuario',
-    list(dfUsers['email'].unique()))
+    list(temp[temp['amount']>0]['email'].unique()))
 id_user = dfUsers[dfUsers['email']==option_user]['_id'].reset_index(drop=True)[0]
 
 df_actividad_usuario = pd.DataFrame(columns=['Evento','Open','Apuesta','Monto','Fecha'])
