@@ -246,11 +246,23 @@ st.bar_chart(df_bets_user)
 
 ## Tabla probabilidades del evento
 st.markdown("<hr/>",unsafe_allow_html=True)
-st.markdown("## Probabilidades del evento")
+st.markdown("## Evento")
 option_event = st.selectbox(
     'Evento Activo',
     list(df_events_active['EVENTO']))
 id_event = dfContests[dfContests['name']==option_event]['_id'].reset_index(drop=True)[0]
+
+df_actividad_evento = pd.DataFrame(columns=['Evento','Open','Usuario','Apuesta','Monto','Fecha'])
+cont = 0
+for index, row in dfBets[dfBets['contestId']==id_event].iterrows():
+    nom_evento = dfContests[dfContests['_id']==row['contestId']]['name'].reset_index(drop=True).loc[0]
+    open_evento = dfContests[dfContests['_id']==row['contestId']]['isContestOpenStatus'].reset_index(drop=True).loc[0]
+    nom_usuario = dfUsers[dfUsers['_id']==row['userId']]['email'].reset_index(drop=True).loc[0]
+    df_actividad_evento.loc[cont] = [nom_evento,open_evento,nom_usuario,row['option'],row['amount'],row['createdAt']]
+    cont = cont + 1
+df_actividad_evento['Fecha'] = df_actividad_evento['Fecha'].dt.floor("D")
+st.dataframe(df_actividad_evento.style.format({"Monto": "{:.2f}"}))
+
 df_odds = pd.DataFrame(columns=['Opcion','Probabilidad Pagina','Numero Apuestas','Monto Apuestas','Probabilidad Usuarios'])
 options_dict = dfContests[dfContests['_id']==id_event]['options'].reset_index(drop=True).loc[0]
 total_amount = float(dfBets[dfBets['contestId']==id_event]['amount'].sum())
