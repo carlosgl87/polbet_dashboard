@@ -231,9 +231,18 @@ for index, row in dfBets[dfBets['userId']==id_user].iterrows():
     open_evento = dfContests[dfContests['_id']==row['contestId']]['isContestOpenStatus'].reset_index(drop=True).loc[0]
     df_actividad_usuario.loc[cont] = [nom_evento,open_evento,row['option'],row['amount'],row['createdAt']]
     cont =cont + 1
+df_actividad_Usuario['Fecha'] = df_actividad_Usuario['Fecha'].dt.date
+st.dataframe(df_actividad_usuario.style.format({"Monto": "{:.2f}"}))
 
-st.dataframe(df_actividad_usuario)
-
+today = date.today()
+Dateslist = [today - timedelta(days = day) for day in range(20)]
+df_bets_user = pd.DataFrame(Dateslist,columns=['Fecha'])
+df_bets_user['Fecha'] = pd.to_datetime(df_bets_user['Fecha'])
+df_bets_user = pd.merge(df_bets_user,df_actividad_Usuario.groupby('Fecha').agg({'Monto':'sum'}).reset_index(),how='left',on='Fecha')
+df_bets_user['Monto'] = df_bets_user['Monto'].fillna(0)
+df_bets_user['Fecha'] = df_bets_user['Fecha'].dt.strftime('%y-%m-%d')
+df_bets_user = df_bets_user.set_index('Fecha')
+st.bar_chart(df_bets_user)
 
 ## Tabla probabilidades del evento
 st.markdown("<hr/>",unsafe_allow_html=True)
