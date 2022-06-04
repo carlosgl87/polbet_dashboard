@@ -396,9 +396,9 @@ for index, row in dfUsers.iterrows():
             cont = cont + 1
 
 @st.cache
- def convert_df(df):
-     # IMPORTANT: Cache the conversion to prevent computation on every rerun
-     return df.to_csv().encode('utf-8')
+def convert_df(df):
+    # IMPORTANT: Cache the conversion to prevent computation on every rerun
+    return df.to_csv().encode('utf-8')
 
 csv = convert_df(df_balance_usuario)
 
