@@ -238,7 +238,7 @@ today = date.today()
 Dateslist = [today - timedelta(days = day) for day in range(20)]
 df_bets_user = pd.DataFrame(Dateslist,columns=['Fecha'])
 df_bets_user['Fecha'] = pd.to_datetime(df_bets_user['Fecha'])
-df_bets_user = pd.merge(df_bets_user,df_actividad_Usuario.groupby('Fecha').agg({'Monto':'sum'}).reset_index(),how='left',on='Fecha')
+df_bets_user = pd.merge(df_bets_user,df_actividad_usuario.groupby('Fecha').agg({'Monto':'sum'}).reset_index(),how='left',on='Fecha')
 df_bets_user['Monto'] = df_bets_user['Monto'].fillna(0)
 df_bets_user['Fecha'] = df_bets_user['Fecha'].dt.strftime('%y-%m-%d')
 df_bets_user = df_bets_user.set_index('Fecha')
