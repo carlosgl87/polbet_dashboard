@@ -232,6 +232,7 @@ for index, row in dfBets[dfBets['userId']==id_user].iterrows():
     df_actividad_usuario.loc[cont] = [nom_evento,open_evento,row['option'],row['amount'],row['createdAt']]
     cont =cont + 1
 df_actividad_usuario['Fecha'] = df_actividad_usuario['Fecha'].dt.floor("D")
+df_actividad_usuario['Fecha'] = df_actividad_usuario['Fecha'].dt.strftime('%y-%m-%d')
 st.dataframe(df_actividad_usuario.style.format({"Monto": "{:.2f}"}))
 
 today = date.today()
@@ -261,6 +262,8 @@ for index, row in dfBets[dfBets['contestId']==id_event].iterrows():
     df_actividad_evento.loc[cont] = [nom_evento,open_evento,nom_usuario,row['option'],row['amount'],row['createdAt']]
     cont = cont + 1
 df_actividad_evento['Fecha'] = df_actividad_evento['Fecha'].dt.floor("D")
+df_actividad_evento['Fecha'] = df_actividad_evento['Fecha'].dt.strftime('%y-%m-%d')
+
 st.dataframe(df_actividad_evento.style.format({"Monto": "{:.2f}"}))
 
 df_odds = pd.DataFrame(columns=['Opcion','Probabilidad Pagina','Numero Apuestas','Monto Apuestas','Probabilidad Usuarios'])
