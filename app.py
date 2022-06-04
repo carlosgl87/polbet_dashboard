@@ -245,7 +245,10 @@ df_bets_user['Monto'] = df_bets_user['Monto'].fillna(0)
 df_bets_user = df_bets_user.set_index('Fecha')
 st.bar_chart(df_bets_user)
 
-## Tabla probabilidades del evento
+#####################
+## SECCION EVENTOS ##
+#####################
+
 st.markdown("<hr/>",unsafe_allow_html=True)
 st.markdown("## Evento")
 option_event = st.selectbox(
@@ -263,6 +266,7 @@ for index, row in dfBets[dfBets['contestId']==id_event].iterrows():
     cont = cont + 1
 df_actividad_evento['Fecha'] = df_actividad_evento['Fecha'].dt.floor("D")
 #df_actividad_evento['Fecha'] = df_actividad_evento['Fecha'].dt.strftime('%y-%m-%d')
+st.dataframe(df_actividad_evento.style.format({"Monto": "{:.2f}"}))
 
 today = date.today()
 Dateslist = [today - timedelta(days = day) for day in range(20)]
@@ -275,7 +279,7 @@ df_bets_contest = df_bets_contest.set_index('Fecha')
 st.bar_chart(df_bets_contest)
 
 
-st.dataframe(df_actividad_evento.style.format({"Monto": "{:.2f}"}))
+
 
 df_odds = pd.DataFrame(columns=['Opcion','Probabilidad Pagina','Numero Apuestas','Monto Apuestas','Probabilidad Usuarios'])
 options_dict = dfContests[dfContests['_id']==id_event]['options'].reset_index(drop=True).loc[0]
@@ -348,6 +352,64 @@ df_resultado_evento.loc[1] = ['Ganancia',amount_loser-amount_winner_gain]
 df_resultado_evento.loc[2] = ['% Ganancia',(amount_loser-amount_winner_gain)/amount_total]
 
 st.dataframe(df_resultado_evento.style.format({"Monto": "{:.2f}"}))
+##########################
+## Bajar Archivo Marilu ##
+##########################
+
+df_balance_usuario = pd.DataFrame(columns=['usuario','tipo','estado','fecha','monto_apostado','monto'])
+cont = 0
+for index, row in dfUsers.iterrows():
+    #name_user = 'cyjys87@gmail.com'
+    name_user = row['email']
+    #name_id = ObjectId('61a1b16a121e35f5b8278323')
+    name_id = row['_id']
+    lista_cuenta = dfUsers[dfUsers['email']==name_user]['balance_history'].values[0]
+    
+    df_balance_usuario.loc[cont] = [name_user,'regalo','regalo',np.nan,np.nan,20]
+    cont = cont + 1
+    
+    if type(lista_cuenta) is list:
+        for i in range(len(lista_cuenta)):
+            if lista_cuenta[i]['state'] == 'approved':
+                if lista_cuenta[i]['balanceType'] == 'deposit':
+                    fecha = pd.to_datetime(lista_cuenta[i]['createdAt'])- pd.Timedelta(hours=5)
+                    df_balance_usuario.loc[cont] = [name_user,'deposito','aprobado',fecha,lista_cuenta[i]['amount'],lista_cuenta[i]['amount']]
+                    cont = cont + 1
+                if lista_cuenta[i]['balanceType'] == 'withdrawal':
+                    fecha = pd.to_datetime(lista_cuenta[i]['createdAt'])- pd.Timedelta(hours=5)
+                    df_balance_usuario.loc[cont] = [name_user,'retiro','aprobado',fecha,lista_cuenta[i]['amount'],lista_cuenta[i]['amount']]
+                    cont = cont + 1
+
+    for index, row in dfBets[dfBets['userId']==name_id].iterrows():
+        if dfContests[dfContests['_id']==row['contestId']]['isContestOpenStatus'].reset_index(drop=True).loc[0] == False:
+            ganada = row['winner']
+            fecha = pd.to_datetime(row['createdAt'])- pd.Timedelta(hours=5)
+            if ganada:
+                df_balance_usuario.loc[cont] = [name_user,'apuesta',ganada,fecha,row['amount'],row['potentialGain']]
+                cont = cont + 1
+            else:
+                df_balance_usuario.loc[cont] = [name_user,'apuesta',ganada,fecha,row['amount'],row['amount']]
+                cont = cont + 1
+        else:
+            fecha = pd.to_datetime(row['createdAt'])- pd.Timedelta(hours=5)
+            df_balance_usuario.loc[cont] = [name_user,'apuesta','proceso',fecha,row['amount'],row['amount']]
+            cont = cont + 1
+
+@st.cache
+ def convert_df(df):
+     # IMPORTANT: Cache the conversion to prevent computation on every rerun
+     return df.to_csv().encode('utf-8')
+
+csv = convert_df(df_balance_usuario)
+
+st.download_button(
+     label="Descargar Datos para Marilu",
+     data=csv,
+     file_name='Balance_usuarios.csv',
+     mime='text/csv',
+ )
+
+
 
 ## Analisis Apuestas Cerradas
 st.markdown("<hr/>",unsafe_allow_html=True)
