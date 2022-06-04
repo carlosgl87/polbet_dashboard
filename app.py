@@ -216,6 +216,25 @@ st.markdown("## Usuarios Principales")
 st.dataframe(df_temp_1.style.format({"Saldo": "{:.1f}","Apuestas en Curso": "{:.1f}","Monto Perdido":"{:.1f}","Monto Ganado":"{:.1f}","Apuestas": "{:.0f}"}))
 #st.dataframe(df_temp_1.style.format({"Saldo": "{:.1f}", "Apuestas en Curso": "{:.1f}", "Monto Perdido":"{:.1f}","Monto Ganado":"{:.1f}","Apuestas": "{:.0f}"}))
 
+## Detalle por usuario
+st.markdown("<hr/>",unsafe_allow_html=True)
+st.markdown("## Usuario")
+option_user = st.selectbox(
+    'Usuario',
+    list(dfUsers['email'].unique()))
+id_user = dfUsers[dfUsers['email']==option_user]['_id'].reset_index(drop=True)[0]
+
+df_actividad_usuario = pd.DataFrame(columns=['Evento','Open','Apuesta','Monto','Fecha'])
+cont = 0
+for index, row in dfBets[dfBets['userId']==id_user].iterrows():
+    nom_evento = dfContests[dfContests['_id']==row['contestId']]['name'].reset_index(drop=True).loc[0]
+    open_evento = dfContests[dfContests['_id']==row['contestId']]['isContestOpenStatus'].reset_index(drop=True).loc[0]
+    df_actividad_usuario.loc[cont] = [nom_evento,open_evento,row['option'],row['amount'],row['createdAt']]
+    cont =cont + 1
+
+st.dataframe(df_actividad_usuario)
+
+
 ## Tabla probabilidades del evento
 st.markdown("<hr/>",unsafe_allow_html=True)
 st.markdown("## Probabilidades del evento")
