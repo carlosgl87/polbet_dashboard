@@ -317,41 +317,7 @@ st.markdown("<hr/>",unsafe_allow_html=True)
 st.markdown("## Retiros")
 st.dataframe(df_retiros.style.format({"Monto": "{:.1f}"}))
 
-## Simulacion Ganancia Cierre Apuesta
-st.markdown("<hr/>",unsafe_allow_html=True)
-st.markdown("## Simulador cierre evento")
 
-dfBets['amount'] = pd.to_numeric(dfBets['amount'])
-dfBets['potentialGain'] = pd.to_numeric(dfBets['potentialGain'])
-
-simulator_option_event = st.selectbox(
-    'Evento',
-    list(dfContests[dfContests['isContestOpenStatus']==True]['name']))
-
-simulator_id_event = dfContests[dfContests['name']==simulator_option_event]['_id'].reset_index(drop=True)[0]
-options_dict = dfContests[dfContests['_id']==simulator_id_event]['options'].reset_index(drop=True).loc[0]
-options_list = []
-for i in range(len(options_dict)):
-    options_list.append(options_dict[i]['option_explanation'])
-
-option_winner = st.selectbox(
-    'Opcion Ganadora',
-    options_list)
-
-st.write('Evolucion montos apuestas: ', simulator_option_event)
-st.write('Opcion Ganadora: ', option_winner)
-
-amount_total = dfBets[dfBets['contestId']==simulator_id_event]['amount'].sum()
-amount_winnet_total = dfBets[(dfBets['contestId']==simulator_id_event)&(dfBets['option']==option_winner)]['amount'].sum()
-amount_winner_gain = dfBets[(dfBets['contestId']==simulator_id_event)&(dfBets['option']==option_winner)]['potentialGain'].sum() - amount_winnet_total
-amount_loser = dfBets[(dfBets['contestId']==simulator_id_event)&(dfBets['option']!=option_winner)]['amount'].sum()
-
-df_resultado_evento = pd.DataFrame(columns=['Concepto','Monto'])
-df_resultado_evento.loc[0] = ['Monto Apostado',amount_total]
-df_resultado_evento.loc[1] = ['Ganancia',amount_loser-amount_winner_gain]
-df_resultado_evento.loc[2] = ['% Ganancia',(amount_loser-amount_winner_gain)/amount_total]
-
-st.dataframe(df_resultado_evento.style.format({"Monto": "{:.2f}"}))
 ##########################
 ## Bajar Archivo Marilu ##
 ##########################
@@ -402,12 +368,54 @@ def convert_df(df):
 
 csv = convert_df(df_balance_usuario)
 
+st.markdown("<hr/>",unsafe_allow_html=True)
+st.markdown("## Descargar Datos de Balance de Usuarios")
+
 st.download_button(
-     label="Descargar Datos para Marilu",
+     label="Descargar Datos",
      data=csv,
      file_name='Balance_usuarios.csv',
      mime='text/csv',
  )
+
+
+
+## Simulacion Ganancia Cierre Apuesta
+st.markdown("<hr/>",unsafe_allow_html=True)
+st.markdown("## Simulador cierre evento")
+
+dfBets['amount'] = pd.to_numeric(dfBets['amount'])
+dfBets['potentialGain'] = pd.to_numeric(dfBets['potentialGain'])
+
+simulator_option_event = st.selectbox(
+    'Evento',
+    list(dfContests[dfContests['isContestOpenStatus']==True]['name']))
+
+simulator_id_event = dfContests[dfContests['name']==simulator_option_event]['_id'].reset_index(drop=True)[0]
+options_dict = dfContests[dfContests['_id']==simulator_id_event]['options'].reset_index(drop=True).loc[0]
+options_list = []
+for i in range(len(options_dict)):
+    options_list.append(options_dict[i]['option_explanation'])
+
+option_winner = st.selectbox(
+    'Opcion Ganadora',
+    options_list)
+
+st.write('Evolucion montos apuestas: ', simulator_option_event)
+st.write('Opcion Ganadora: ', option_winner)
+
+amount_total = dfBets[dfBets['contestId']==simulator_id_event]['amount'].sum()
+amount_winnet_total = dfBets[(dfBets['contestId']==simulator_id_event)&(dfBets['option']==option_winner)]['amount'].sum()
+amount_winner_gain = dfBets[(dfBets['contestId']==simulator_id_event)&(dfBets['option']==option_winner)]['potentialGain'].sum() - amount_winnet_total
+amount_loser = dfBets[(dfBets['contestId']==simulator_id_event)&(dfBets['option']!=option_winner)]['amount'].sum()
+
+df_resultado_evento = pd.DataFrame(columns=['Concepto','Monto'])
+df_resultado_evento.loc[0] = ['Monto Apostado',amount_total]
+df_resultado_evento.loc[1] = ['Ganancia',amount_loser-amount_winner_gain]
+df_resultado_evento.loc[2] = ['% Ganancia',(amount_loser-amount_winner_gain)/amount_total]
+
+st.dataframe(df_resultado_evento.style.format({"Monto": "{:.2f}"}))
+
 
 
 
