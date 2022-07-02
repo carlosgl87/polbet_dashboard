@@ -251,9 +251,10 @@ def dif_prob(id_event):
     return df_odds['error'].sum()
 
 ## tabla resumen 
-df_events_active = pd.DataFrame(columns=['EVENTO','OPEN','NUM_PERSONAS','NUM_APUESTA','MONTO_APUESTA','TICKET_PROMEDIO','DIF_PROB'])
+df_events_active = pd.DataFrame(columns=['ID','EVENTO','OPEN','NUM_PERSONAS','NUM_APUESTA','MONTO_APUESTA','TICKET_PROMEDIO','DIF_PROB'])
 cont = 0
 for index, row in dfContests.iterrows():
+    id_event = row['_id']
     name_event = row['name']
     open_status = row['isContestOpenStatus']
     number_pers = len(dfBets[dfBets['contestId']==ObjectId(row['_id'])]['userId'].unique())
@@ -264,7 +265,7 @@ for index, row in dfContests.iterrows():
         diferencia_probabilidades = dif_prob(row['_id'])
     else:
         diferencia_probabilidades = np.nan
-    df_events_active.loc[cont] = [name_event, open_status, number_pers, number_bets,amount_bets,mean_amount,diferencia_probabilidades]
+    df_events_active.loc[cont] = [id_event,name_event, open_status, number_pers, number_bets,amount_bets,mean_amount,diferencia_probabilidades]
     cont = cont + 1
 
 df_temp_1 = df_temp[['email','amount','monto_curso','monto_perdido','monto_ganado','contests_bets','createdAt_last_bet','createdAt']]
@@ -301,9 +302,26 @@ col3.metric("Monto Retiros", mon_retiros)
 col4.metric("Numero Retiros", num_retiros)
 
 ## Tabla Eventos Usuarios y Montos
+
+date_7_days = ga_report['ga:date'].max() - pd.Timedelta(days=7)
+date_3_days = ga_report['ga:date'].max() - pd.Timedelta(days=3)
+
+df_id_contest = ga_report[(ga_report['indicador_contest_page']==True)].groupby('id_contest').agg({'ga:sessions':'sum'}).reset_index()
+
+temp = ga_report[(ga_report['indicador_contest_page']==True)&(ga_report['ga:date'] >= date_3_days)].groupby('id_contest').agg({'ga:sessions':'sum'}).reset_index()
+temp = temp.rename(columns={'ga:sessions': 'ga:sessions_3_days'})
+df_id_contest = pd.merge(df_id_contest,temp,how='left',on='id_contest')
+df_id_contest['ga:sessions_3_days'] = df_id_contest['ga:sessions_3_days'].fillna(0) 
+
+temp = ga_report[(ga_report['indicador_contest_page']==True)&(ga_report['ga:date'] >= date_7_days)].groupby('id_contest').agg({'ga:sessions':'sum'}).reset_index()
+temp = temp.rename(columns={'ga:sessions': 'ga:sessions_7_days'})
+df_id_contest = pd.merge(df_id_contest,temp,how='left',on='id_contest')
+df_id_contest['ga:sessions_7_days'] = df_id_contest['ga:sessions_7_days'].fillna(0)
+
 st.markdown("<hr/>",unsafe_allow_html=True)
 st.markdown("## Eventos Activos")
 df_events_active = df_events_active.sort_values('MONTO_APUESTA', ascending=False).reset_index(drop=True)
+df_events_active = pd.merge(df_events_active,df_id_contest,how='left',left_on='ID',right_on='id_contest')
 st.dataframe(df_events_active)
 
 ## Evolucion entradas a la pagina
