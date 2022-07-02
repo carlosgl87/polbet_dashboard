@@ -308,20 +308,22 @@ date_3_days = ga_report['ga:date'].max() - pd.Timedelta(days=3)
 
 df_id_contest = ga_report[(ga_report['indicador_contest_page']==True)].groupby('id_contest').agg({'ga:sessions':'sum'}).reset_index()
 
-temp = ga_report[(ga_report['indicador_contest_page']==True)&(ga_report['ga:date'] >= date_3_days)].groupby('id_contest').agg({'ga:sessions':'sum'}).reset_index()
-temp = temp.rename(columns={'ga:sessions': 'ga:sessions_3_days'})
-df_id_contest = pd.merge(df_id_contest,temp,how='left',on='id_contest')
-df_id_contest['ga:sessions_3_days'] = df_id_contest['ga:sessions_3_days'].fillna(0) 
+# temp = ga_report[(ga_report['indicador_contest_page']==True)&(ga_report['ga:date'] >= date_3_days)].groupby('id_contest').agg({'ga:sessions':'sum'}).reset_index()
+# temp = temp.rename(columns={'ga:sessions': 'ga:sessions_3_days'})
+# df_id_contest = pd.merge(df_id_contest,temp,how='left',on='id_contest')
+# df_id_contest['ga:sessions_3_days'] = df_id_contest['ga:sessions_3_days'].fillna(0) 
 
-temp = ga_report[(ga_report['indicador_contest_page']==True)&(ga_report['ga:date'] >= date_7_days)].groupby('id_contest').agg({'ga:sessions':'sum'}).reset_index()
-temp = temp.rename(columns={'ga:sessions': 'ga:sessions_7_days'})
-df_id_contest = pd.merge(df_id_contest,temp,how='left',on='id_contest')
-df_id_contest['ga:sessions_7_days'] = df_id_contest['ga:sessions_7_days'].fillna(0)
+# temp = ga_report[(ga_report['indicador_contest_page']==True)&(ga_report['ga:date'] >= date_7_days)].groupby('id_contest').agg({'ga:sessions':'sum'}).reset_index()
+# temp = temp.rename(columns={'ga:sessions': 'ga:sessions_7_days'})
+# df_id_contest = pd.merge(df_id_contest,temp,how='left',on='id_contest')
+# df_id_contest['ga:sessions_7_days'] = df_id_contest['ga:sessions_7_days'].fillna(0)
 
 st.markdown("<hr/>",unsafe_allow_html=True)
 st.markdown("## Eventos Activos")
 df_events_active = df_events_active.sort_values('MONTO_APUESTA', ascending=False).reset_index(drop=True)
 df_events_active = pd.merge(df_events_active,df_id_contest,how='left',left_on='ID',right_on='id_contest')
+del df_events_active['ID']
+del df_events_active['id_contest']
 st.dataframe(df_events_active)
 
 ## Evolucion entradas a la pagina
