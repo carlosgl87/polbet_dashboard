@@ -323,10 +323,12 @@ st.markdown("## Eventos Activos")
 df_events_active = pd.merge(df_events_active,df_id_contest,how='left',left_on='ID',right_on='id_contest')
 #del df_events_active['ID']
 #del df_events_active['id_contest']
-del df_events_active['TICKET_PROMEDIO']
-del df_events_active['DIF_PROB']
-del df_events_active['NUM_APUESTA']
-del df_events_active['MONTO_APUESTA']
+# del df_events_active['TICKET_PROMEDIO']
+# del df_events_active['DIF_PROB']
+# del df_events_active['NUM_APUESTA']
+# del df_events_active['MONTO_APUESTA']
+
+df_events_active = df_events_active[['EVENTO','ID','id_contest']]
 
 #'NUM_APUESTA','MONTO_APUESTA'
 #'MONTO_APUESTA','TICKET_PROMEDIO','DIF_PROB'
