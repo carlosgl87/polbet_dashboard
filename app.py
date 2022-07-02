@@ -306,6 +306,23 @@ st.markdown("## Eventos Activos")
 df_events_active = df_events_active.sort_values('MONTO_APUESTA', ascending=False).reset_index(drop=True)
 st.dataframe(df_events_active)
 
+## Evolucion entradas a la pagina
+st.markdown("<hr/>",unsafe_allow_html=True)
+st.markdown("## Evolucion sesiones pagina web")
+
+dfSessions = ga_report.groupby('ga:date').agg({'ga:sessions':'sum'}).reset_index()
+today = date.today()
+Dateslist = [today - timedelta(days = day) for day in range(20)]
+df_days_sessions = pd.DataFrame(Dateslist,columns=['day'])
+df_days_sessions['day'] = pd.to_datetime(df_days_sessions['day'])
+df_days_sessions = pd.merge(df_days_sessions,dfSessions,how='left',left_on='day',right_on='ga:date')
+del df_days_sessions['ga:date']
+df_days_sessions['ga:sessions'] = df_days_sessions['ga:sessions'].fillna(0)
+df_days_sessions['day'] = df_days_sessions['day'].dt.strftime('%y-%m-%d')
+df_days_sessions = df_days_sessions.set_index('day')
+st.bar_chart(df_days_sessions)
+
+
 ## Evolucion montos de apuestas ultimos 20 dias
 st.markdown("<hr/>",unsafe_allow_html=True)
 st.markdown("## Evolucion montos de apuestas ultimos 20 dias")
