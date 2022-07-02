@@ -328,7 +328,7 @@ df_events_active = pd.merge(df_events_active,df_id_contest,how='left',left_on='I
 # del df_events_active['NUM_APUESTA']
 # del df_events_active['MONTO_APUESTA']
 
-df_events_active = df_events_active[['EVENTO','ID','id_contest']]
+df_events_active = df_events_active[['ID','id_contest']]
 
 #'NUM_APUESTA','MONTO_APUESTA'
 #'MONTO_APUESTA','TICKET_PROMEDIO','DIF_PROB'
