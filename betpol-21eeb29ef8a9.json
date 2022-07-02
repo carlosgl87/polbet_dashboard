@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "betpol",
+  "private_key_id": "21eeb29ef8a9586207f591c6daffe7df220f287a",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCtXEj7rEXkBOPu\nxkpSdhUSfFg4fyoTCkyEpEJ4DTDE9sos9ThcOoyUV1qCt4AwtAwVPfJ5Z5uHk0fc\nr+fAP0uv4LpIr3zMoctLco8M0her+IwYs8XMpa87MeRGeS1xU7LNP4+4n4i4WsrY\nzR4vEZCzlonn+726ROPqgBjsn+HF/z3DsSXh6SHtx1wS2BXDaEvWgKlrYxdaqrTF\nAsAu3pA37gZ5ZoBbGo5Xhk+i9a6mV64ROqZLIkOhUZi6NLrxT3BoI0e/3wPyCm1Y\nl5FC+LGdJIuYKBzv+REhMdwm1j97exvN0tkgN1PSU1c0QELVxYXpvGS27ytloi6N\ngWL8nB5/AgMBAAECggEAR2QMKBwrEfoTlXZyD+BR0DGFsQppHLsuhKcSOlcQQORy\noK4BXjW8Q7BvdQo1T5ktqqe+jVFl4qB7xP1pnilStWSBwkIGTkzIp9LO5xQzrF2n\n79pEeAC5F1L18zGezZ8OsGhe+sQz7Nty0nIx3mdI5DP3qaFpYeZRx3WmDffPZZYG\ncnWRT/p1Qr94Wayba5+7AqvSfKzNbuOWqRmxDVtyFRAa3wZPM1Z0BpYpACMUke8I\nT8t5gKzUg3X6XeBKYDxO3a1odhkRqvYzXkl5GzOPe5DM8eaYE6wr1AKdVDjtz+GA\nO9qTsxSGob/22vkjgAthwVfIjZDz8CdbMxxX7ZwkfQKBgQDv6ra/1uUQOYu3wYMY\nAIB6rzLCEmfvCi6yA9WZfVBusw6NrCMBD5mHuBHLs0PwjLJg2Dri4kQaxhzjhlgx\n/LktWpA2Wp9ZDaLfxbTP9zF58hfXSRTA/oSMChF5YOfScbdf7KXz+2NKpz4sfgfu\n0i0MOHjYMz0ldxK95f3PidgDOwKBgQC4+2CRv0RGPgz44AEOxrP7as4L/rMru2tT\nRBK/KwqBc2YZu2CC5eX8fye5eXm5T1LEC2/5Zlnaj11Ot7fcj4C0gm3Dy11jTf+i\n0RQ/LTzr6mQpJk51evz1qaxyIbwJ2/0+WEcCGz2yoRdVUkQzFotHNVcDoCR2EZZp\nzl3C9jOVjQKBgCTsNG/VvK8AjDYde/Vnrl4zNFaVypUJNiKDYI4csRI4UFcRVNnG\n8tPmSibVUfFlVdZ9sKJWPDD6qFuDw3L99+m49FTJIZjs9lIF9UvEOUMRNQYW4zDI\netGqgwHxHfxPL+99VhT0bVWB45mpU8M3aWNmFYMAb7qiVqoPCT61ch8dAoGBAIta\nPB6wAyQTfLxELCfQgygFBuI8Zwer8idRIfpH12s73w/Fe+hAfuifdfKg05VJb6Vm\npF0ywMAIvpcdifIrXR8fHsegPWMhEFK8xU7uqnVjJz9krziLhWMgBlwYk8qtonLE\nGAI7OViHSMeq6Nu/wP7M7Rc7HhygFTryDupfhO7FAoGBAKie75wJl/1u4gQltF0T\niO/4a4FAB68ylPzpjzSuSgT0CMm7qIoyfTDijy3PcxdVZ/o1o3W3M4+d2rX/ncvQ\n/yIDJat0KCnvlHkVJJwCv6IBMf0CDPFuhS4QtXKWqAVwBE8ihZ9f8uP9HBAoipYD\nTqgckInBNx2IrG4+yudTT/wi\n-----END PRIVATE KEY-----\n",
+  "client_email": "betpol-api-client@betpol.iam.gserviceaccount.com",
+  "client_id": "100818899821415087725",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/betpol-api-client%40betpol.iam.gserviceaccount.com"
+}
