@@ -321,6 +321,7 @@ df_id_contest = ga_report[(ga_report['indicador_contest_page']==True)].groupby('
 st.markdown("<hr/>",unsafe_allow_html=True)
 st.markdown("## Eventos Activos")
 df_events_active = pd.merge(df_events_active,df_id_contest,how='left',left_on='ID',right_on='id_contest')
+print(df_events_active.head())
 del df_events_active['ID']
 del df_events_active['id_contest']
 # del df_events_active['TICKET_PROMEDIO']
