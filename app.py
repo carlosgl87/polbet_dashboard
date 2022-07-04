@@ -167,18 +167,14 @@ st.set_page_config(
 filtro_usuarios = st.select_slider("Filtrar usuarios PolBet:", ["sinFiltro", "conFiltro"])
 
 
-lista_usuarios_excluidos = ['admin@gmail.com',
-'jcarloslara23@gmail.com',
+lista_usuarios_excluidos = [
+'admin@gmail.com',
 'byjgphotos@gmail.com',
-'felipevdq@gmail.com',
 'fk.salasf@gmail.com',
-'juleysigcc@gmail.com',
-'devtorres2@gmail.com',
-'cyjys87@gmail.com',
-'carlos.gamero@yanbal.com',
-'juleysigcc@hotmail.com',
 'luis@inka-labs.com',
-'devtorres@gmail.com']
+'gabriella@email.com',
+'devtorres@gmail.com',
+'devtorres2@gmail.com']
 
 lista_usuarios_excluidos_ids = dfUsers[dfUsers['email'].isin(lista_usuarios_excluidos)]['_id'].to_list()
 
